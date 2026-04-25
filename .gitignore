@@ -1,0 +1,11 @@
+.build/
+.build_x86_64/
+.build_arm64/
+*.xcodeproj/
+*.xcworkspace/
+DerivedData/
+.swiftpm/
+Package.resolved
+*.swp
+*.swo
+.DS_Store
