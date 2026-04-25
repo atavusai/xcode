@@ -14,7 +14,7 @@ Integrate Atavus AI assistants into your iOS app with native Swift.
 
 Add the package in Xcode:
 1. **File → Add Package Dependencies...**
-2. Paste: `https://github.com/atavus-ai/atavus-ios-sdk.git`
+2. Paste: `https://github.com/atavusai/xcode.git`
 3. Select version: **1.0.0**
 4. Add to your target
 
@@ -22,7 +22,7 @@ Or add to your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/atavus-ai/atavus-ios-sdk.git", from: "1.0.0")
+    .package(url: "https://github.com/atavusai/xcode.git", from: "1.0.0")
 ],
 targets: [
     .target(name: "YourApp", dependencies: ["AtavusAI"])
