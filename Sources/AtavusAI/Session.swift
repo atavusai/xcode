@@ -8,6 +8,7 @@ public final class Session: @unchecked Sendable {
     private let client: AtavusClient
     private let sessionId: String
     private var messages: [Message]
+    private let lock = NSLock()
     private let assistantId: String
 
     /// The unique identifier for this session.
@@ -30,12 +31,16 @@ public final class Session: @unchecked Sendable {
     @discardableResult
     public func send(_ text: String) async throws -> AssistantResponse {
         let userMessage = Message(role: "user", content: text, timestamp: Date())
+        lock.lock()
         messages.append(userMessage)
+        lock.unlock()
 
         let response = try await client.sendMessage(text, sessionId: sessionId)
 
         let assistantMessage = Message(role: "assistant", content: response.text, timestamp: Date())
+        lock.lock()
         messages.append(assistantMessage)
+        lock.unlock()
 
         return response
     }
@@ -48,7 +53,9 @@ public final class Session: @unchecked Sendable {
         AsyncThrowingStream { continuation in
             Task {
                 let userMessage = Message(role: "user", content: text, timestamp: Date())
+                self.lock.lock()
                 self.messages.append(userMessage)
+                self.lock.unlock()
 
                 var fullText = ""
                 do {
@@ -61,7 +68,9 @@ public final class Session: @unchecked Sendable {
                         content: fullText.trimmingCharacters(in: .whitespacesAndNewlines),
                         timestamp: Date()
                     )
-                    self.messages.append(assistantMessage)
+                    self.lock.lock()
+                self.messages.append(assistantMessage)
+                self.lock.unlock()
                     continuation.finish()
                 } catch {
                     continuation.finish(throwing: error)
@@ -72,6 +81,8 @@ public final class Session: @unchecked Sendable {
 
     /// Clears the conversation history for this session.
     public func clearHistory() {
+        lock.lock()
         messages.removeAll()
+        lock.unlock()
     }
 }

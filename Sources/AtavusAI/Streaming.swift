@@ -12,6 +12,7 @@ actor SSEParser {
         buffer += data
         var events: [SSEEvent] = []
         let lines = buffer.components(separatedBy: "\n")
+        guard !lines.isEmpty else { return [] }
 
         // Rebuild buffer from incomplete last line
         if !lines.isEmpty, !buffer.hasSuffix("\n") {

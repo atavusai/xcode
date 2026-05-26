@@ -33,6 +33,7 @@ public final class AtavusClient: @unchecked Sendable {
 
         self.decoder = JSONDecoder()
         self.encoder = JSONEncoder()
+        self.decoder.dateDecodingStrategy = .iso8601
     }
 
     // MARK: - Public API
@@ -167,6 +168,7 @@ public final class AtavusClient: @unchecked Sendable {
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
         req.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         req.setValue("AtavusAI-SDK/iOS", forHTTPHeaderField: "User-Agent")
+        req.setValue("1.0.0", forHTTPHeaderField: "X-SDK-Version")
         req.timeoutInterval = config.timeout
         return req
     }
